@@ -2,7 +2,6 @@
 .header {
   display: flex;
   height: 72px;
-  max-width: 1440px;
   background-color: grey;
   
   &__container {
@@ -19,13 +18,4 @@
     justify-content: center;
     align-items: center;
 }
-}
-
-.navigation {
-  &__list {
-  display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 48px;
-  }
 }
