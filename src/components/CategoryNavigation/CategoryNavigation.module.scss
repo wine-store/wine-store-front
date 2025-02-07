@@ -1,0 +1,18 @@
+.navigation {
+  display: flex;
+}
+
+.footerNavigation {
+  display: flex;
+
+  .navigation__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.sidebarNavigation {
+  display: flex;
+}
