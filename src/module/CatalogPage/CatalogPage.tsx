@@ -1,15 +1,13 @@
-import { NavLink } from "react-router-dom";
-
-export const CatalogPage = () => {
+import { Sidebar } from '../../components/Sidebar';
+import styles from './CatalogPage.module.scss';
+type CatalogPageProps = {
+  category: 'all' | 'wine' | 'object' | 'certificate';
+};
+export const CatalogPage: React.FC<CatalogPageProps> = ({ category }) => {
   return (
-    <nav>
-    <ul>
-      <li><NavLink to="/catalog">All</NavLink></li>
-      <li><NavLink to="/catalog/wine">Wine</NavLink></li>
-      <li><NavLink to="/catalog/product">Products</NavLink></li>
-      <li><NavLink to="/catalog/certificate">Certificate</NavLink></li>
-    </ul>
-  </nav>
+    <section className={styles.catalog}>
+      <Sidebar />
+      <div>{category}</div>
+    </section>
   );
-}
-
+};
