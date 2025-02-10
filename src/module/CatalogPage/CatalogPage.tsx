@@ -10,7 +10,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({ category }) => {
   ) => {}, [category]);
   return (
     <section className={styles.catalog}>
-      <Sidebar />
+      <Sidebar category={category} />
       <div>{category}</div>
     </section>
   );

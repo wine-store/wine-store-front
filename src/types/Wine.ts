@@ -6,7 +6,10 @@ export interface Wine {
   grape: string;
   country: string;
   region: string;
-  vintage: number;
-  capacity: number;
+  vintage: string;
+  capacity: string;
   abv: string;
+  closure: string;
+  characteristics: string;
+  style: string;
 }

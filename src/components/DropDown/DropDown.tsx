@@ -23,7 +23,7 @@ export const DropDown:React.FC = () => {
       return newParams;
     });
     setIsOpen(false);
-    fetchData();
+    // fetchData();
   };
 
   return (

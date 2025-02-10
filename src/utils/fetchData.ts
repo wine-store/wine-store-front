@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useStoreForWine } from "../store/storeForWine";
-
 const setWine = useStoreForWine(state => state.setWine);
 export const fetchData = async () => {
   try {
