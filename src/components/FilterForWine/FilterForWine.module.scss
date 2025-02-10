@@ -1,0 +1,67 @@
+.filterBtn {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+
+  &__text {
+    font-size: 16px;
+    line-height: 19.36px;
+  }
+}
+
+.modal {
+  position: absolute;
+  top: 243px;
+  background-color: gray;
+  padding: 16px;
+  max-height: 579px;
+  width: 432px;
+  overflow-y: auto;
+}
+
+.arrowDown {
+  background-image: url(../../assets/icon/arrow-down.svg);
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 12px;
+    background-position: center;
+    transition: transform 0.3s ease;
+
+    &--active {
+      transform: rotate(180deg);
+    }
+  }
+
+  .simpleAccordion{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 16px;
+  }
+
+.accordionControl {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  padding-block: 16px;
+  border-bottom: 1px solid #ccc;
+  width: 192px;
+  
+  &--active {
+    width: 400px;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+  }
+}
+.accordionPanel {
+  width: 100%;
+  padding: 8px;
+  background-color: #f8f8f8;
+}
+
+.filterTag{
+  cursor: pointer;
+}

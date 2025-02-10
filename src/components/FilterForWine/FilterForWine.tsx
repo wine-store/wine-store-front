@@ -1,29 +1,43 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useStoreForWine } from '../../store/storeForWine';
-
+import styles from './FilterForWine.module.scss';
+import classNames from 'classnames';
+import { useClickOutside } from '@mantine/hooks';
+import { fetchData } from '../../utils/fetchData';
 const filtersFromServer = {
-  "wineTypes": ["Red", "Rose", "Sparkling", "White"],
-  "priceRanges": ["00-49", "50-74", "75-99", "100-149", "150-199", "200+"],
-  "grape": ["Cabernet Sauvignon", "Merlot", "Chardonnay", "Pinot Noir"],
-  "country": ["France", "Italy", "Spain", "USA"],
-  "vintage": ["2020", "2019", "2018", "2017"],
-  "capacity": ["750ml", "1L", "1.5L"],
-  "abv": ["12%", "13%", "14%", "15%"],
-  "region": ["Bordeaux", "Tuscany", "La Rioja"]
-}
-export const FilterForWine = () => {
-  // const setWine = useStoreForWine((state) => state.setWine);
+  type: ['Red', 'Rose', 'Sparkling', 'White'],
+  priceRanges: ['00-49', '50-74', '75-99', '100-149', '150-199', '200+'],
+  grape: ['Cabernet Sauvignon', 'Merlot', 'Chardonnay', 'Pinot Noir'],
+  country: ['France', 'Italy', 'Spain', 'USA'],
+  vintage: ['2020', '2019', '2018', '2017'],
+  capacity: ['750ml', '1L', '1.5L'],
+  abv: ['12%', '13%', '14%', '15%'],
+  region: ['Bordeaux', 'Tuscany', 'La Rioja'],
+};
+
+const filterCategories = [
+  { label: 'Type', key: 'type' },
+  { label: 'Price range', key: 'priceRanges' },
+  { label: 'Grape', key: 'grape' },
+  { label: 'Country', key: 'country' },
+  { label: 'Vintage', key: 'vintage' },
+  { label: 'Capacity', key: 'capacity' },
+  { label: 'ABV', key: 'abv' },
+  { label: 'Region', key: 'region' },
+];
+
+export const FilterForWine: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [filters, setFilters] = useState<{
-    label: string;
-    key: string;
-    values: string[];
-  }[]>([]);;
+  const [filters, setFilters] = useState<
+    { label: string; key: string; values: string[] }[]
+    >([]);
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  const ref = useClickOutside(() => setIsOpen(false));
+  
   useEffect(() => {
     const fetchFilters = async () => {
       setLoading(true);
@@ -31,21 +45,10 @@ export const FilterForWine = () => {
         // const response = await axios.get('/path-to-api/filters');
         const filterData = filtersFromServer;
 
-        const filterCategories = [
-          { label: 'Type', key: 'wineTypes' },
-          { label: 'Price range', key: 'priceRanges' },
-          { label: 'Grape', key: 'grape' },
-          { label: 'Country', key: 'country' },
-          { label: 'Vintage', key: 'vintage' },
-          { label: 'Capacity', key: 'capacity' },
-          { label: 'ABV', key: 'abv' },
-          { label: 'Region', key: 'region' }
-        ];
-
         const mappedFilters = filterCategories.map(({ label, key }) => ({
           label,
           key,
-          values: filterData[key as keyof typeof filtersFromServer] || []
+          values: filterData[key as keyof typeof filtersFromServer] || [],
         }));
 
         setFilters(mappedFilters);
@@ -70,98 +73,125 @@ export const FilterForWine = () => {
         .filter(item => item !== value)
         .forEach(val => newParams.append(key, val));
     } else {
-      newParams.append(key.toLowerCase(), value);
+      newParams.append(key, value);
     }
 
     setSearchParams(newParams);
   };
 
-  const activeFilters = Array.from(searchParams.entries());
+  const activeFilters = [...searchParams.entries()]
+  .filter(([key]) => filterCategories.some(category => category.key === key))
+  .map(([key, value]) => ({ key, value }));
 
-  const applyFilters = async () => {
+  const applyFilters = () => {
     setLoading(true);
-    try {
-      // const params = new URLSearchParams(activeFilters);
-      // const response = await axios.get(`/wines?${params.toString()}`);
-      // setWine(response.data);
-      setIsOpen(false);
-    } catch (error) {
-      console.log('Error fetching filtered data:', error);
-    } finally {
-      setLoading(false);
-    }
+    fetchData();
+    setIsOpen(false);
   };
 
   const reset = () => {
-    setSearchParams(new URLSearchParams());
-    setIsOpen(false);
     setActiveIndex(null);
+
+    const sortValue = searchParams.get('sort');
+    const newParams = new URLSearchParams();
+    if (sortValue) {
+      newParams.set('sort', sortValue);
+    }
+  
+    setSearchParams(newParams, { replace: true });
+    setIsOpen(false);
   };
 
   
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  
-    const toggleAccordion = (index: number) => {
-      setActiveIndex((prev) => (prev === index ? null : index));
-    };
 
-    return (
-      <>
-        <button className="filter-btn" onClick={() => setIsOpen(prevState => !prevState)}>
-          Filter ▼
-        </button>
-     
-        {isOpen && !error && (
-          <div className="filter-modal">
-            <div className="filter-content">
-              <h3>Your choice</h3>
-              <div className="selected-filters">
-                {activeFilters.map(([key, value]) => (
-                  <button
-                    key={`${key}-${value}`}
-                    onClick={() => toggleFilter(key, value)}
-                    className="filter-tag"
-                  >
-                    {value}
-                  </button>
-                ))}
-              </div>
+  const toggleAccordion = (index: number) => {
+    setActiveIndex(prev => (prev === index ? null : index));
+  };
 
-              <div className="simple-accordion">
-                {filters.map((filter, index) => (
-                  <div key={index}>
-                    <div
-                      className="accordion-control"
-                      onClick={() => toggleAccordion(index)}
-                    >
-                      {filter.label}
-                    </div>
-                    {activeIndex === index && (
-                      <div className="accordion-panel">
-                        <div className="filter-group">
-                          {filter.values.map((value) => (
-                            <button key={value} className="filter-tag" onClick={() => toggleFilter(filter.key, value)}>
-                              {value}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-  
+  return (
+    <>
+      <button
+        className={classNames(styles.filterBtn, {
+          [styles['filterBtn--active']]: isOpen,
+        })}
+        onClick={() => setIsOpen(prevState => !prevState)}
+      >
+        <span className={styles.filterBtn__text}>Filter</span>
+        <span
+          className={classNames(styles.arrowDown, {
+            [styles['arrowDown--active']]: isOpen,
+          })}
+        ></span>
+      </button>
 
-              <div className="filter-actions">
-                <button className="show-results" onClick={applyFilters} disabled={loading}>
-                  {loading ? 'Loading...' : 'Show results'}
-                </button>
-                <button onClick={reset}>Reset</button>
-              </div>
-            </div>
+      {isOpen && !error && (
+        <div ref={ref} className={styles.modal}>
+          <div className={styles.yourChoice}>
+            <div>Your choice</div>
           </div>
-        )}
-      </>
-    );
-  };
+          {activeFilters.length > 0 && (
+            <div className={styles.filterGroup}>
+              {activeFilters.map(({key, value}) => (
+                <button
+                  key={`${key}-${value}`}
+                  onClick={() => toggleFilter(key, value)}
+                  className={styles.filterTag}
+                >
+                  {value}
+                </button>
+              ))}
+            </div>
+          )}
 
+          <div className={styles.simpleAccordion}>
+            {filters.map((filter, index) => (
+              <div key={index}>
+                <div
+                   className={classNames(styles.accordionControl, {
+                    [styles['accordionControl--active']]: activeIndex === index,
+                  })}
+                  onClick={() => toggleAccordion(index)}
+                >
+                  <span className={styles.accordionControl__text}>
+                    {filter.label}
+                  </span>
+                  <span
+                    className={classNames(styles.arrowDown, {
+                      [styles['arrowDown--active']]: activeIndex === index,
+                    })}
+                  ></span>
+                </div>
+                {activeIndex === index && (
+                  <div className={styles.accordionPanel}>
+                    <div className={styles.filterGroup}>
+                      {filter.values.map(value => (
+                        <button
+                          key={value}
+                          className={styles.filterTag}
+                          onClick={() => toggleFilter(filter.key, value)}
+                        >
+                          {value}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.filterActions}>
+            <button
+              className={styles.showResults}
+              onClick={applyFilters}
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Show results'}
+            </button>
+            <button onClick={reset}>Reset</button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
