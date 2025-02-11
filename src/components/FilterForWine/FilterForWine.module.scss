@@ -12,16 +12,6 @@
   }
 }
 
-.modal {
-  position: absolute;
-  top: 243px;
-  background-color: gray;
-  padding: 16px;
-  max-height: 579px;
-  width: 432px;
-  overflow-y: auto;
-}
-
 .arrowDown {
   background-image: url(../../assets/icon/arrow-down.svg);
     background-repeat: no-repeat;
@@ -35,12 +25,22 @@
     }
   }
 
-  .simpleAccordion{
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 16px;
-  }
+.modal {
+  position: absolute;
+  top: 243px;
+  background-color: gray;
+  padding: 16px;
+  max-height: 579px;
+  width: 432px;
+  overflow-y: auto;
+}
+
+.simpleAccordion{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+}
 
 .accordionControl {
   display: flex;
@@ -56,12 +56,21 @@
     flex-wrap: nowrap;
   }
 }
-.accordionPanel {
+.filterGroup {
   width: 100%;
-  padding: 8px;
-  background-color: #f8f8f8;
+  padding-block: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
 .filterTag{
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+ 
+  padding: 10.5px 16px;
+  border: 1px solid #ccc;
 }

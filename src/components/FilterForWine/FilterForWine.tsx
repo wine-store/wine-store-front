@@ -58,7 +58,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
   }, []);
 
   const priceAccordionIndex = 999;
-
+  
   const applyFilters = useCallback(() => {
     setIsOpen(false);
   }, []);
@@ -80,7 +80,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
         className={classNames(styles.filterBtn, {
           [styles['filterBtn--active']]: isOpen,
         })}
-        onClick={() => setIsOpen(prevState => !prevState)}
+        onClick={() => setIsOpen(true)}
       >
         <span className={styles.filterBtn__text}>Filter</span>
         <span
