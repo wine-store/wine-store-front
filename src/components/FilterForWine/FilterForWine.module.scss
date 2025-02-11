@@ -1,0 +1,100 @@
+.dropdown {
+  position: relative;
+}
+
+.filterBtn {
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+
+  &__text {
+    font-size: 16px;
+    line-height: 19.36px;
+  }
+}
+
+.arrowDown {
+  background-image: url(../../assets/icon/arrow-down.svg);
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 12px;
+  background-position: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+
+    &--active {
+      transform: rotate(180deg);
+    }
+  }
+
+.modal {
+  position: absolute;
+  top: calc(100% + 8px);
+  background-color: gray;
+  padding: 16px;
+  max-height: 579px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.simpleAccordion{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  padding-bottom: 24px;
+}
+
+.accordionControl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding-block: 16px;
+  border-bottom: 1px solid #ccc;
+  width: 400px;
+  
+  &--active {
+    flex-wrap: nowrap;
+  }
+
+  &__text {
+    flex-grow: 1;
+  }
+}
+.filterGroup {
+  width: 100%;
+  padding-block: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.filterTag{
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+ 
+  padding: 10.5px 16px;
+  border: 1px solid #ccc;
+}
+
+.filterActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.button {
+  height: 44px;
+  width: 100%;
+
+  &:hover {
+    background-color: #ccc;
+  }
+}

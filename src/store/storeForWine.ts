@@ -7,5 +7,5 @@ interface WineState {
 }
 export const useStoreForWine = create<WineState>((set) => ({
   wine: [],
-  setWine: (wine) => set({ wine }),
+  setWine: (wine: Wine[]) => set({ wine }),
 }));

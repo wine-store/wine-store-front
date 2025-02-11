@@ -1,0 +1,49 @@
+.dropdown {
+  display: flex;
+  gap: 8px;
+  justify-content: right;
+  align-items: center;
+  min-width: 231px;
+  position: relative;
+
+  &__label {
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    gap: 16px;
+  }
+
+  &__list {
+    position: absolute;
+    top: calc(100% + 8px);
+    width: 208px;
+    // padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+  }
+
+  &__item {
+    display: flex;
+    cursor: pointer;
+    padding: 8px;
+    justify-content: left;
+
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+}
+
+.arrowDown {
+  background-image: url(../../assets/icon/arrow-down.svg);
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 12px;
+  background-position: center;
+  transition: transform 0.3s ease;
+
+  &--active {
+    transform: rotate(180deg);
+  }
+}

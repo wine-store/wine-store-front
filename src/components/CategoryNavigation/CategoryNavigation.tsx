@@ -12,13 +12,13 @@ export const CategoryNavigation: React.FC<CategoryNavigationProps> = ({ classNam
         <li className={styles.navigation__item}>
           <NavLink to="/">All</NavLink>
         </li>
-        <li>
+        <li className={styles.navigation__item}>
           <NavLink to="/wine">Wine</NavLink>
         </li>
-        <li>
+        <li className={styles.navigation__item}>
           <NavLink to="/object">Object</NavLink>
         </li>
-        <li>
+        <li className={styles.navigation__item}>
           <NavLink to="/certificate">Certificate</NavLink>
         </li>
       </ul>
