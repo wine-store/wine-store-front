@@ -1,5 +1,8 @@
-.filterBtn {
+.dropdown {
   position: relative;
+}
+
+.filterBtn {
   cursor: pointer;
   display: flex;
   gap: 8px;
@@ -14,11 +17,12 @@
 
 .arrowDown {
   background-image: url(../../assets/icon/arrow-down.svg);
-    background-repeat: no-repeat;
-    width: 24px;
-    height: 12px;
-    background-position: center;
-    transition: transform 0.3s ease;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 12px;
+  background-position: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
 
     &--active {
       transform: rotate(180deg);
@@ -27,12 +31,12 @@
 
 .modal {
   position: absolute;
-  top: 243px;
+  top: calc(100% + 8px);
   background-color: gray;
   padding: 16px;
   max-height: 579px;
-  width: 432px;
   overflow-y: auto;
+  z-index: 10;
 }
 
 .simpleAccordion{
@@ -40,20 +44,24 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: 16px;
+  padding-bottom: 24px;
 }
 
 .accordionControl {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
   padding-block: 16px;
   border-bottom: 1px solid #ccc;
-  width: 192px;
+  width: 400px;
   
   &--active {
-    width: 400px;
-    flex-shrink: 0;
     flex-wrap: nowrap;
+  }
+
+  &__text {
+    flex-grow: 1;
   }
 }
 .filterGroup {
@@ -73,4 +81,20 @@
  
   padding: 10.5px 16px;
   border: 1px solid #ccc;
+}
+
+.filterActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.button {
+  height: 44px;
+  width: 100%;
+
+  &:hover {
+    background-color: #ccc;
+  }
 }

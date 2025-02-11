@@ -3,19 +3,18 @@ import { useSearchParams } from 'react-router-dom';
 import styles from './FilterForWine.module.scss';
 import classNames from 'classnames';
 import { useClickOutside } from '@mantine/hooks';
-// import { filterCategories } from '../../types/FilterCategories';
-// import { fetchFilters } from '../../utils/fetchFilters';
 import { useFilterStore } from '../../store/filtersStore';
 // import { fetchData } from '../../utils/fetchData';
 import { priseRange } from '../../types/PriseRange';
+import { Button } from '@mantine/core';
 type Props = {
   category: 'all' | 'wine' | 'object' | 'certificate';
 };
 
 export const FilterForWine: React.FC<Props> = ({ category }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isOpen, setIsOpen] = useState(false);  
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndexes, setActiveIndexes] = useState<Set<number>>(new Set());
   const filters = useFilterStore(state => state.filters);
   const error = useFilterStore(state => state.error);
   const loading = useFilterStore(state => state.loading);
@@ -28,43 +27,54 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
       initializeFilters();
     }
   }, [initialized, initializeFilters]);
-  
 
-  const toggleFilter = useCallback((key: string, value: string) => {
-    const newParams = new URLSearchParams(searchParams);
-    const existingValues = newParams.getAll(key);
+  const toggleFilter = useCallback(
+    (key: string, value: string) => {
+      const newParams = new URLSearchParams(searchParams);
+      const existingValues = newParams.getAll(key);
 
-    if (existingValues.includes(value)) {
-      newParams.delete(key);
-      existingValues
-        .filter(item => item !== value)
-        .forEach(val => newParams.append(key, val));
-    } else {
-      newParams.append(key, value);
-    }
+      if (existingValues.includes(value)) {
+        newParams.delete(key);
+        existingValues
+          .filter(item => item !== value)
+          .forEach(val => newParams.append(key, val));
+      } else {
+        newParams.append(key, value);
+      }
 
-    setSearchParams(newParams);
-  }, [searchParams, setSearchParams]);
-
-  const activeFilters = React.useMemo(() => 
-    [...searchParams.entries()]
-      .filter(([key]) => filters.some(category => category.key === key))
-      .map(([key, value]) => ({ key, value })),
-    [searchParams, filters]
+      setSearchParams(newParams);
+    },
+    [searchParams, setSearchParams],
   );
 
-  const toggleAccordion = useCallback((index: number) => {
-    setActiveIndex(prev => prev === index ? null : index);
+  const activeFilters = React.useMemo(
+    () =>
+      [...searchParams.entries()]
+        .filter(([key]) => filters.some(category => category.key === key))
+        .map(([key, value]) => ({ key, value })),
+    [searchParams, filters],
+  );
+
+  const toggleAccordion = useCallback((index: number, filterLabel: string) => {
+    setActiveIndexes(prev => {
+      const newIndexes = new Set(prev);
+      if (newIndexes.has(index)) {
+        newIndexes.delete(index);
+      } else {
+        newIndexes.add(index);
+      }
+      return newIndexes;
+    });
+    // Add fetch count to API
+    console.log(filterLabel)
   }, []);
 
-  const priceAccordionIndex = 999;
-  
   const applyFilters = useCallback(() => {
     setIsOpen(false);
   }, []);
 
   const reset = useCallback(() => {
-    setActiveIndex(null);
+    setActiveIndexes(new Set());
     const sortValue = searchParams.get('sort');
     const newParams = new URLSearchParams();
     if (sortValue) {
@@ -75,7 +85,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
   }, [searchParams, setSearchParams]);
 
   return (
-    <>
+    <div className={styles.dropdown}>
       <button
         className={classNames(styles.filterBtn, {
           [styles['filterBtn--active']]: isOpen,
@@ -92,21 +102,24 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
 
       {isOpen && !error && (
         <div ref={ref} className={styles.modal}>
-          <div className={styles.yourChoice}>
-            <div>Your choice</div>
-          </div>
           {activeFilters.length > 0 && (
-            <div className={styles.filterGroup}>
-              {activeFilters.map(({ key, value }) => (
-                <button
-                  key={`${key}-${value}`}
-                  onClick={() => toggleFilter(key, value)}
-                  className={styles.filterTag}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
+            <>
+              <div className={styles.yourChoice}>
+                <div>Your choice</div>
+              </div>
+
+              <div className={styles.filterGroup}>
+                {activeFilters.map(({ key, value }) => (
+                  <button
+                    key={`${key}-${value}`}
+                    onClick={() => toggleFilter(key, value)}
+                    className={styles.filterTag}
+                  >
+                    {value}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
           {category === 'wine' ? (
             <div className={styles.simpleAccordion}>
@@ -115,20 +128,20 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   <div
                     className={classNames(styles.accordionControl, {
                       [styles['accordionControl--active']]:
-                        activeIndex === index,
+                      activeIndexes.has(index),
                     })}
-                    onClick={() => toggleAccordion(index)}
+                    onClick={() => toggleAccordion(index, filter.label)}
                   >
                     <span className={styles.accordionControl__text}>
                       {filter.label}
                     </span>
                     <span
                       className={classNames(styles.arrowDown, {
-                        [styles['arrowDown--active']]: activeIndex === index,
+                        [styles['arrowDown--active']]: activeIndexes.has(index),
                       })}
                     ></span>
                   </div>
-                  {activeIndex === index && (
+                  {activeIndexes.has(index) && (
                     <div className={styles.accordionPanel}>
                       <div className={styles.filterGroup}>
                         {filter.values.map(value => (
@@ -137,7 +150,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                             className={styles.filterTag}
                             onClick={() => toggleFilter(filter.key, value)}
                           >
-                            {value}
+                            {`${value} (count)`}
                           </button>
                         ))}
                       </div>
@@ -148,53 +161,40 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
             </div>
           ) : (
             <div className={styles.simpleAccordion}>
-              <div
-                className={classNames(styles.accordionControl, {
-                  [styles['accordionControl--active']]:
-                    activeIndex === priceAccordionIndex,
-                })}
-                onClick={() => toggleAccordion(priceAccordionIndex)}
-              >
+              <div className={styles.accordionControl}>
                 <span className={styles.accordionControl__text}>
                   Prise range
                 </span>
-                <span
-                  className={classNames(styles.arrowDown, {
-                    [styles['arrowDown--active']]:
-                      activeIndex === priceAccordionIndex,
-                  })}
-                ></span>
               </div>
-              {activeIndex === priceAccordionIndex && (
-                <div className={styles.accordionPanel}>
-                  <div className={styles.filterGroup}>
-                    {priseRange.values.map(value => (
-                      <button
-                        key={value}
-                        className={styles.filterTag}
-                        onClick={() => toggleFilter('priceRanges', value)}
-                      >
-                        {value}
-                      </button>
-                    ))}
-                  </div>
+
+              <div className={styles.accordionPanel}>
+                <div className={styles.filterGroup}>
+                  {priseRange.values.map(value => (
+                    <button
+                      key={value}
+                      className={styles.filterTag}
+                      onClick={() => toggleFilter('priceRanges', value)}
+                    >
+                      {value}
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
           <div className={styles.filterActions}>
-            <button
-              className={styles.showResults}
+            <Button
+              className={styles.button}
               onClick={applyFilters}
               disabled={loading}
             >
-              {loading ? 'Loading...' : 'Show results'}
-            </button>
-            <button onClick={reset}>Reset</button>
+              {loading ? 'Loading...' : 'Show (count )results'}
+            </Button>
+            <Button className={styles.button} onClick={reset}>Reset</Button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
