@@ -81,11 +81,11 @@ export const Footer = () => {
       <span className={styles.footer__divider}></span>
       <div className={styles.footer__copyright}>
         <p className={styles.footer__text}>
-          Cellar & Vine - Curated wines, unforgettable moments. Savor every sip,
+          Cellar & Vine - Curated wines, unforgettable moments. <br /> Savor every sip,
           celebrate every occasion
         </p>
         <p className={styles.footer__text}>
-          Liquor Licence: 57703968. Please enjoy our products responsibly.
+          Liquor Licence: 57703968. Please <br /> enjoy our products responsibly.
         </p>
         <p className={styles.footer__text}>© 2025 All rights reserved.</p>
       </div>
