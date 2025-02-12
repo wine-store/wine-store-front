@@ -1,23 +1,32 @@
 import styles from './Navigation.module.scss';
 import { NavLink } from 'react-router-dom';
+import { Dispatch, SetStateAction, useCallback } from 'react';
+import classNames from 'classnames';
 
 interface NavigationProps {
   classNameNav?: string;
+  setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
 }
-export const Navigation: React.FC<NavigationProps> = ({ classNameNav = '' }) => {
+
+export const Navigation: React.FC<NavigationProps> = ({ classNameNav = '', setIsMenuOpen }) => {
+  const closeMenu = useCallback(() => setIsMenuOpen(false), [setIsMenuOpen]);
+
   return (
-    <nav className={`${styles.navigation} ${ styles[classNameNav] || ''}`}>
+    <nav className={classNames(styles.navigation, styles[classNameNav])}>
       <ul className={styles.navigation__list}>
-        <li className={styles.navigation__item}>
-          <NavLink to="/">Catalog</NavLink>
-        </li>
-        <li className={styles.navigation__item}>
-          <NavLink to="/about-us">About Us</NavLink>
-        </li>
-        <li className={styles.navigation__item}>
-          <NavLink to="/account">Account</NavLink>
-        </li>
+        {[
+          { path: '/', label: 'Catalog' },
+          { path: '/about-us', label: 'About Us' },
+          { path: '/account', label: 'Account' },
+        ].map(({ path, label }) => (
+          <li key={path} className={styles.navigation__item}>
+            <NavLink to={path} className={styles.navigation__link} onClick={closeMenu}>
+              <div className={styles.title}>{label}</div>
+              <div className={styles.arrow}></div>
+            </NavLink>
+          </li>
+        ))}
       </ul>
-    </nav>  
+    </nav>
   );
 };

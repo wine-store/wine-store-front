@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styles from './FilterForWine.module.scss';
 import classNames from 'classnames';
-import { useClickOutside } from '@mantine/hooks';
+// import { useClickOutside } from '@mantine/hooks';
 import { useFilterStore } from '../../store/filtersStore';
 // import { fetchData } from '../../utils/fetchData';
 import { priseRange } from '../../types/PriseRange';
@@ -13,14 +13,14 @@ type Props = {
 
 export const FilterForWine: React.FC<Props> = ({ category }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [activeIndexes, setActiveIndexes] = useState<Set<number>>(new Set());
   const filters = useFilterStore(state => state.filters);
   const error = useFilterStore(state => state.error);
   const loading = useFilterStore(state => state.loading);
   const initialized = useFilterStore(state => state.initialized);
   const initializeFilters = useFilterStore(state => state.initializeFilters);
-  const ref = useClickOutside(() => setIsOpen(false));
+  // const ref = useClickOutside(() => setIsOpen(false));
 
   useEffect(() => {
     if (!initialized && filters.length === 0) {
@@ -70,7 +70,6 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
   }, []);
 
   const applyFilters = useCallback(() => {
-    setIsOpen(false);
   }, []);
 
   const reset = useCallback(() => {
@@ -81,27 +80,12 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
       newParams.set('sort', sortValue);
     }
     setSearchParams(newParams, { replace: true });
-    setIsOpen(false);
   }, [searchParams, setSearchParams]);
 
   return (
-    <div className={styles.dropdown}>
-      <button
-        className={classNames(styles.filterBtn, {
-          [styles['filterBtn--active']]: isOpen,
-        })}
-        onClick={() => setIsOpen(true)}
-      >
-        <span className={styles.filterBtn__text}>Filter</span>
-        <span
-          className={classNames(styles.arrowDown, {
-            [styles['arrowDown--active']]: isOpen,
-          })}
-        ></span>
-      </button>
-
-      {isOpen && !error && (
-        <div ref={ref} className={styles.modal}>
+    <div className={styles.filter}>
+      {!error && (
+        <div className={styles.sidebar}>
           {activeFilters.length > 0 && (
             <>
               <div className={styles.yourChoice}>
@@ -113,7 +97,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   <button
                     key={`${key}-${value}`}
                     onClick={() => toggleFilter(key, value)}
-                    className={styles.filterTag}
+                    className={ classNames(styles.filterTag, styles['filterTag--active'])}
                   >
                     {value}
                   </button>
@@ -147,7 +131,9 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                         {filter.values.map(value => (
                           <button
                             key={value}
-                            className={styles.filterTag}
+                            className={classNames(styles.filterTag, {
+                              [styles['filterTag--active']]: searchParams.getAll(filter.key).includes(value),
+                            })}
                             onClick={() => toggleFilter(filter.key, value)}
                           >
                             {`${value} (count)`}

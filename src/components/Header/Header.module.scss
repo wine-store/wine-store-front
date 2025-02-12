@@ -1,21 +1,88 @@
 @import '../../styles/main';
 .header {
+  height: 56px;
   display: flex;
-  height: 72px;
+  justify-content: center;
   background-color: grey;
+
+  @include on-desktop {
+    height: 72px;
+  }
+}
   
-  &__container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-inline: 24px ;
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-inline: 16px;
+
+    @include on-tablet {
+      padding-inline: 32px;
   }
 
-  &__logo {
-    display: flex;
+&__burger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include on-tablet {
+    display: none;
+  }
+}
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  flex-basis: 100%;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  background: white;
+  min-height: 0;
+  max-height: 0;
+  transition: min-height $hover-transition ease, opacity $hover-transition ease;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 10;
+  padding-inline: 16px;
+  padding-top: 80px;
+  
+
+  &--active {
+    opacity: 0.9;
+    min-height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
+
+    @include on-tablet {
+      min-height: unset;
+      max-height: unset;
+      opacity: unset;
+      padding-top: unset;
+    }
+  }
+
+  @include on-tablet {
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    padding-top: 0;
+    position: static;
+    bottom: unset;
+    left: unset;
+    display: flex;
+    height: 100%;
+    background: unset;
+    min-height: unset;
+    max-height: unset;
+    overflow: unset;
+    opacity: unset;
+  }
 }
-}
+
+
+
+

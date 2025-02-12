@@ -1,14 +1,11 @@
-import { FilterForWine } from '../FilterForWine';
 import styles from './Sidebar.module.scss';
 import { CategoryNavigation } from '../CategoryNavigation';
 import { DropDown } from '../DropDown';
-type Props = {
-  category: 'all' | 'wine' | 'object' | 'certificate';
-};
-export const Sidebar: React.FC<Props> = ({ category }) => {
+
+export const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
-      <FilterForWine category={category} />
+      <div className={styles.filterBtn__text}>Filter</div>
       <CategoryNavigation classNameNav="sidebarNavigation" />
       <DropDown />
     </div>

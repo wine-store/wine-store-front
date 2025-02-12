@@ -1,7 +1,6 @@
-.dropdown {
-  position: relative;
+.filter {
+  grid-column: span 3;
 }
-
 .filterBtn {
   cursor: pointer;
   display: flex;
@@ -29,20 +28,13 @@
     }
   }
 
-.modal {
-  position: absolute;
-  top: calc(100% + 8px);
-  background-color: gray;
-  padding: 16px;
-  max-height: 579px;
+.sidebar {
   overflow-y: auto;
   z-index: 10;
 }
 
 .simpleAccordion{
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
   column-gap: 16px;
   padding-bottom: 24px;
 }
@@ -54,7 +46,6 @@
   cursor: pointer;
   padding-block: 16px;
   border-bottom: 1px solid #ccc;
-  width: 400px;
   
   &--active {
     flex-wrap: nowrap;
@@ -81,6 +72,14 @@
  
   padding: 10.5px 16px;
   border: 1px solid #ccc;
+
+  &:hover {
+    background: #ccc;
+  }
+
+  &--active {
+    background-color: green;
+  }
 }
 
 .filterActions {
