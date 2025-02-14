@@ -1,16 +1,41 @@
-.filter {
-  grid-column: span 3;
-}
-.filterBtn {
-  cursor: pointer;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
+@use '../../styles/main.scss';
+@use "../../styles/mixin" as *;
 
-  &__text {
-    font-size: 16px;
-    line-height: 19.36px;
+.filter {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; 
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow-y: auto;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, z-index 0s linear 0.3s; 
+  
+  &--active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    z-index: 1000;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, z-index 0s linear;
+  
+  }
+  
+  @include on-desktop {
+    display: grid;
+    grid-column: span 3;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    z-index: auto;
+    padding: 0;
   }
 }
 
@@ -22,6 +47,7 @@
   background-position: center;
   flex-shrink: 0;
   transition: transform 0.3s ease;
+  cursor: pointer;
 
     &--active {
       transform: rotate(180deg);
@@ -31,6 +57,39 @@
 .sidebar {
   overflow-y: auto;
   z-index: 10;
+}
+
+.filterForMob {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-bottom: 40px;
+
+  .arrowDown {
+    position: absolute;
+    left:0;
+    transform: rotate(90deg);
+  }
+
+  &__text {
+    text-align: center;
+    flex: 1;
+  }
+
+  @include on-desktop {
+    display: none;
+  }
+}
+
+.yourChoice {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reset {
+  text-decoration: underline;
 }
 
 .simpleAccordion{
@@ -80,13 +139,6 @@
   &--active {
     background-color: green;
   }
-}
-
-.filterActions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
 }
 
 .button {

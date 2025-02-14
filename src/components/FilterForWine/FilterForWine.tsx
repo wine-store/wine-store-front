@@ -9,9 +9,15 @@ import { priseRange } from '../../types/PriseRange';
 import { Button } from '@mantine/core';
 type Props = {
   category: 'all' | 'wine' | 'object' | 'certificate';
+  toggleFilterVisibility: () => void;
+  isFilterOpen: boolean;
 };
 
-export const FilterForWine: React.FC<Props> = ({ category }) => {
+export const FilterForWine: React.FC<Props> = ({
+  category,
+  toggleFilterVisibility,
+  isFilterOpen,
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
   // const [isOpen, setIsOpen] = useState(false);
   const [activeIndexes, setActiveIndexes] = useState<Set<number>>(new Set());
@@ -66,10 +72,11 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
       return newIndexes;
     });
     // Add fetch count to API
-    console.log(filterLabel)
+    console.log(filterLabel);
   }, []);
 
   const applyFilters = useCallback(() => {
+    toggleFilterVisibility();
   }, []);
 
   const reset = useCallback(() => {
@@ -80,16 +87,28 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
       newParams.set('sort', sortValue);
     }
     setSearchParams(newParams, { replace: true });
+    toggleFilterVisibility();
   }, [searchParams, setSearchParams]);
 
   return (
-    <div className={styles.filter}>
+    <div
+      className={classNames(styles.filter, {
+        [styles['filter--active']]: isFilterOpen,
+      })}
+    >
       {!error && (
         <div className={styles.sidebar}>
+          <div className={styles.filterForMob}>
+            <span className={styles.arrowDo} onClick={toggleFilterVisibility}></span>
+            <span className={styles.filterForMobles__text}>Filter</span>
+          </div>
           {activeFilters.length > 0 && (
             <>
               <div className={styles.yourChoice}>
                 <div>Your choice</div>
+                <Button className={styles.reset} onClick={reset}>
+                  Reset
+                </Button>
               </div>
 
               <div className={styles.filterGroup}>
@@ -97,7 +116,10 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   <button
                     key={`${key}-${value}`}
                     onClick={() => toggleFilter(key, value)}
-                    className={ classNames(styles.filterTag, styles['filterTag--active'])}
+                    className={classNames(
+                      styles.filterTag,
+                      styles['filterTag--active'],
+                    )}
                   >
                     {value}
                   </button>
@@ -112,7 +134,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   <div
                     className={classNames(styles.accordionControl, {
                       [styles['accordionControl--active']]:
-                      activeIndexes.has(index),
+                        activeIndexes.has(index),
                     })}
                     onClick={() => toggleAccordion(index, filter.label)}
                   >
@@ -132,7 +154,9 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                           <button
                             key={value}
                             className={classNames(styles.filterTag, {
-                              [styles['filterTag--active']]: searchParams.getAll(filter.key).includes(value),
+                              [styles['filterTag--active']]: searchParams
+                                .getAll(filter.key)
+                                .includes(value),
                             })}
                             onClick={() => toggleFilter(filter.key, value)}
                           >
@@ -158,7 +182,11 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   {priseRange.values.map(value => (
                     <button
                       key={value}
-                      className={styles.filterTag}
+                      className={classNames(styles.filterTag, {
+                        [styles['filterTag--active']]: searchParams
+                          .getAll('priceRanges')
+                          .includes(value),
+                      })}
                       onClick={() => toggleFilter('priceRanges', value)}
                     >
                       {value}
@@ -169,16 +197,13 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
             </div>
           )}
 
-          <div className={styles.filterActions}>
-            <Button
-              className={styles.button}
-              onClick={applyFilters}
-              disabled={loading}
-            >
-              {loading ? 'Loading...' : 'Show (count )results'}
-            </Button>
-            <Button className={styles.button} onClick={reset}>Reset</Button>
-          </div>
+          <Button
+            className={styles.button}
+            onClick={applyFilters}
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Show (count )results'}
+          </Button>
         </div>
       )}
     </div>

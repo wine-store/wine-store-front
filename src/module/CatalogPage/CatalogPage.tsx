@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Sidebar } from '../../components/Sidebar';
 import styles from './CatalogPage.module.scss';
 import { FilterForWine } from '../../components/FilterForWine';
@@ -8,12 +8,16 @@ type CatalogPageProps = {
 };
 
 export const CatalogPage: React.FC<CatalogPageProps> = ({ category }) => {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const toggleFilterVisibility = () => {
+    setIsFilterOpen(prevState => !prevState); 
+  };
   useEffect(() => {}, [category]);
   return (
     <article className={styles.catalog}>
-      <Sidebar />
+      <Sidebar toggleFilterVisibility={toggleFilterVisibility} />
       <section className={styles.catalog__content}>
-        <FilterForWine category={category} />
+        <FilterForWine category={category} toggleFilterVisibility={toggleFilterVisibility} isFilterOpen={isFilterOpen} />
         <ul className={styles.cardsConteiner}>
           <li className={styles.card}>
             <ProductCard />

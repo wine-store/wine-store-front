@@ -1,4 +1,6 @@
-@import '../../styles/main.scss';
+@use '../../styles/main.scss';
+@use "../../styles/mixin";
+
 
 .navigation {
   display: flex;
@@ -13,7 +15,7 @@
   margin: 0;
   list-style: none;
 
-  @include on-tablet {
+  @include mixin.on-tablet {
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -25,7 +27,7 @@
   padding-bottom: 8px;
   border-bottom: 1px solid black;
   
-  @include on-tablet {
+  @include mixin.on-tablet {
     padding-bottom: unset;
     border-bottom: unset;
     width: auto;
@@ -37,7 +39,7 @@
   justify-content: space-between;
   align-items: center;
 
-  @include on-tablet {
+  @include mixin.on-tablet {
     // display: ;
   }
 }
@@ -47,7 +49,7 @@
   .navigation__list {
     gap: 49px;
 
-    @include on-tablet {
+    @include mixin.on-tablet {
       gap: 48px;
     }
   }
@@ -80,11 +82,11 @@
   background-position: center;
   transition: transform 0.3s ease;
 
-  @include hover {
+  @include mixin.hover {
     transform: rotate(-45deg);
   }
 
-  @include on-tablet {
+  @include mixin.on-tablet {
     display: none;
   }
 }

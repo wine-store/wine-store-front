@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 // import { fetchData } from '../../utils/fetchData';
 import classNames from 'classnames';
 import { useClickOutside } from '@mantine/hooks';
-
+import sortButton from '../../assets/icon/sort.svg';
 const SORT_OPTIONS = [
   { label: 'Newest', value: 'newest' },
   { label: 'Oldest', value: 'oldest' },
@@ -39,7 +39,6 @@ export const DropDown: React.FC = () => {
       className={styles.dropdown}
       tabIndex={isOpen ? 0 : -1}
       ref={ref}
-      // onBlur={() => setIsOpen(false)}
     >
       <button
         className={styles.dropdown__label}
@@ -47,19 +46,26 @@ export const DropDown: React.FC = () => {
         aria-expanded={isOpen}
       >
         <span className={styles.dropdown__text}>Sort by</span>
+
         <span className={styles.dropdown__value}>
           {SORT_OPTIONS.find(opt => opt.value === sortFromUrl)?.label ?? '...'}
         </span>
-
-      <span
-        className={classNames(styles.arrowDown, {
-          [styles["arrowDown--active"]]: isOpen,
-        })}
+        <span
+          className={classNames(styles.arrowDown, {
+            [styles['arrowDown--active']]: isOpen,
+          })}
         />
-        </button>
+      </button>
+      <button className={styles.dropdown__sortButton} onClick={() => setIsOpen(prev => !prev)}>
+        <img src={sortButton} alt="filter"></img>
+      </button>
 
       {isOpen && (
-        <div className={styles.dropdown__list}>
+        <div className={classNames(styles.dropdown__list, { [styles['dropdown__list--active']]: isOpen })}>
+          <div className={styles.dropdownForMob}>
+          <span className={styles.arrowDown} onClick={() => setIsOpen(false)}></span>
+          <span className={styles.dropdownForMob__text}>Sorting</span> 
+          </div>
           {SORT_OPTIONS.map(({ label, value }) => (
             <button
               key={value}
