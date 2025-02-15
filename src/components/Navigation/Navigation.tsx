@@ -5,11 +5,15 @@ import classNames from 'classnames';
 
 interface NavigationProps {
   classNameNav?: string;
-  setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
+  setIsMenuOpen?: Dispatch<SetStateAction<boolean>>
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ classNameNav = '', setIsMenuOpen }) => {
-  const closeMenu = useCallback(() => setIsMenuOpen(false), [setIsMenuOpen]);
+  const closeMenu = useCallback(() => {
+    if (setIsMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  }, [setIsMenuOpen]);
 
   return (
     <nav className={classNames(styles.navigation, styles[classNameNav])}>
