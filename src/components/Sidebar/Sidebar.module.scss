@@ -1,7 +1,36 @@
-@import '../../styles/main';
+@use '../../styles/main';
+@use "../../styles/mixin" as *;
+
 
 .sidebar {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 56px;
+
+  @include on-tablet {
+    justify-content: center;
+    gap:40px
+  }
+
+  @include on-desktop {
+    justify-content: space-between;
+  }
+}
+
+.filterBtn__text {
+  display: none;
+  @include on-desktop {
+    display: flex;
+  }
+}
+
+.filterButton {
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  cursor: pointer;
+  @include on-desktop {
+    display:none;
+  }
 }
 

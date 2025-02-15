@@ -1,0 +1,53 @@
+@use '../../styles/mixin.scss' as *;
+
+.wineCard{
+  min-width:343px;
+  height: auto;
+  @include on-desktop {
+    min-width:330px;
+  }
+
+  @include hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+} 
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.rating {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 20px;
+}
+
+.starIcon {
+  color: #ffd700;
+  width: 20px;
+  height: 19px;
+}
+
+.ratingValue {
+  font-weight: bold;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}

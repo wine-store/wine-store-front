@@ -1,27 +1,92 @@
+@use '../../styles/main.scss';
+@use "../../styles/mixin";
+
+
 .navigation {
   display: flex;
+  width: 100%;
+
+&__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  @include mixin.on-tablet {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
-.headerNavigation {
+&__item {
+  width: 100%;
+  padding-bottom: 8px;
+  border-bottom: 1px solid black;
+  
+  @include mixin.on-tablet {
+    padding-bottom: unset;
+    border-bottom: unset;
+    width: auto;
+  }
+}
+&__link {
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 
+  @include mixin.on-tablet {
+    // display: ;
+  }
+}
+}
+
+.headerNavigation {
   .navigation__list {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 48px;
+    gap: 49px;
+
+    @include mixin.on-tablet {
+      gap: 48px;
+    }
   }
 }
 
 .footerNavigation {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  .navigation {
+    &__list {
+      gap: 8px;
+      flex-direction: column;
+      align-items: flex-start; 
+      justify-content: center;
+    }
 
-  .navigation__list {
-    flex-direction: column;
-    align-items: center;
+    &__item {
+      border: 0;
+    }
+  }
+  .arrow {
+    display: none;
+  }
+}
+  
+
+.arrow {
+  background-image: url(../../assets/icon/arrow-rigth.svg);
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  background-position: center;
+  transition: transform 0.3s ease;
+
+  @include mixin.hover {
+    transform: rotate(-45deg);
+  }
+
+  @include mixin.on-tablet {
+    display: none;
   }
 }

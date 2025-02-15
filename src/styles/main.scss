@@ -1,1 +1,4 @@
-@import './page.scss'
+@use './page.scss';
+@use './mixin.scss';
+
+$hover-transition: 0.3s;

@@ -2,25 +2,31 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styles from './FilterForWine.module.scss';
 import classNames from 'classnames';
-import { useClickOutside } from '@mantine/hooks';
+// import { useClickOutside } from '@mantine/hooks';
 import { useFilterStore } from '../../store/filtersStore';
 // import { fetchData } from '../../utils/fetchData';
 import { priseRange } from '../../types/PriseRange';
 import { Button } from '@mantine/core';
 type Props = {
   category: 'all' | 'wine' | 'object' | 'certificate';
+  toggleFilterVisibility: () => void;
+  isFilterOpen: boolean;
 };
 
-export const FilterForWine: React.FC<Props> = ({ category }) => {
+export const FilterForWine: React.FC<Props> = ({
+  category,
+  toggleFilterVisibility,
+  isFilterOpen,
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [activeIndexes, setActiveIndexes] = useState<Set<number>>(new Set());
   const filters = useFilterStore(state => state.filters);
   const error = useFilterStore(state => state.error);
   const loading = useFilterStore(state => state.loading);
   const initialized = useFilterStore(state => state.initialized);
   const initializeFilters = useFilterStore(state => state.initializeFilters);
-  const ref = useClickOutside(() => setIsOpen(false));
+  // const ref = useClickOutside(() => setIsOpen(false));
 
   useEffect(() => {
     if (!initialized && filters.length === 0) {
@@ -66,11 +72,11 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
       return newIndexes;
     });
     // Add fetch count to API
-    console.log(filterLabel)
+    console.log(filterLabel);
   }, []);
 
   const applyFilters = useCallback(() => {
-    setIsOpen(false);
+    toggleFilterVisibility();
   }, []);
 
   const reset = useCallback(() => {
@@ -81,31 +87,28 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
       newParams.set('sort', sortValue);
     }
     setSearchParams(newParams, { replace: true });
-    setIsOpen(false);
+    toggleFilterVisibility();
   }, [searchParams, setSearchParams]);
 
   return (
-    <div className={styles.dropdown}>
-      <button
-        className={classNames(styles.filterBtn, {
-          [styles['filterBtn--active']]: isOpen,
-        })}
-        onClick={() => setIsOpen(true)}
-      >
-        <span className={styles.filterBtn__text}>Filter</span>
-        <span
-          className={classNames(styles.arrowDown, {
-            [styles['arrowDown--active']]: isOpen,
-          })}
-        ></span>
-      </button>
-
-      {isOpen && !error && (
-        <div ref={ref} className={styles.modal}>
+    <div
+      className={classNames(styles.filter, {
+        [styles['filter--active']]: isFilterOpen,
+      })}
+    >
+      {!error && (
+        <div className={styles.sidebar}>
+          <div className={styles.filterForMob}>
+            <span className={styles.arrowDo} onClick={toggleFilterVisibility}></span>
+            <span className={styles.filterForMobles__text}>Filter</span>
+          </div>
           {activeFilters.length > 0 && (
             <>
               <div className={styles.yourChoice}>
                 <div>Your choice</div>
+                <Button className={styles.reset} onClick={reset}>
+                  Reset
+                </Button>
               </div>
 
               <div className={styles.filterGroup}>
@@ -113,7 +116,10 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   <button
                     key={`${key}-${value}`}
                     onClick={() => toggleFilter(key, value)}
-                    className={styles.filterTag}
+                    className={classNames(
+                      styles.filterTag,
+                      styles['filterTag--active'],
+                    )}
                   >
                     {value}
                   </button>
@@ -128,7 +134,7 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   <div
                     className={classNames(styles.accordionControl, {
                       [styles['accordionControl--active']]:
-                      activeIndexes.has(index),
+                        activeIndexes.has(index),
                     })}
                     onClick={() => toggleAccordion(index, filter.label)}
                   >
@@ -147,7 +153,11 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                         {filter.values.map(value => (
                           <button
                             key={value}
-                            className={styles.filterTag}
+                            className={classNames(styles.filterTag, {
+                              [styles['filterTag--active']]: searchParams
+                                .getAll(filter.key)
+                                .includes(value),
+                            })}
                             onClick={() => toggleFilter(filter.key, value)}
                           >
                             {`${value} (count)`}
@@ -172,7 +182,11 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
                   {priseRange.values.map(value => (
                     <button
                       key={value}
-                      className={styles.filterTag}
+                      className={classNames(styles.filterTag, {
+                        [styles['filterTag--active']]: searchParams
+                          .getAll('priceRanges')
+                          .includes(value),
+                      })}
                       onClick={() => toggleFilter('priceRanges', value)}
                     >
                       {value}
@@ -183,16 +197,13 @@ export const FilterForWine: React.FC<Props> = ({ category }) => {
             </div>
           )}
 
-          <div className={styles.filterActions}>
-            <Button
-              className={styles.button}
-              onClick={applyFilters}
-              disabled={loading}
-            >
-              {loading ? 'Loading...' : 'Show (count )results'}
-            </Button>
-            <Button className={styles.button} onClick={reset}>Reset</Button>
-          </div>
+          <Button
+            className={styles.button}
+            onClick={applyFilters}
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Show (count )results'}
+          </Button>
         </div>
       )}
     </div>

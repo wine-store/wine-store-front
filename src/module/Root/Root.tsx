@@ -18,21 +18,22 @@ export const Root = () => (
   <Router basename="/wine-store-front/">
     <Routes>
       <Route path="/" element={<App />}>
-      <Route index element={<CatalogPage category="all" />} />
+        <Route index element={<CatalogPage category="all" />} />
+        <Route path={':itemId'} element={<ObjectDetailsPage />} />
         <Route path="home" element={<Navigate to={'/'} replace />} />
       
           <Route path="wine">
             <Route index element={<CatalogPage category="wine" />} />
-            <Route path={':productId'} element={<WineDetailsPage />} />
+            <Route path={':itemId'} element={<WineDetailsPage />} />
           </Route>
           <Route path="object">
             <Route index element={<CatalogPage category="object" />} />
-            <Route path={':productId'} element={<ObjectDetailsPage />} />
+            <Route path={':itemId'} element={<ObjectDetailsPage />} />
           </Route>
        
           <Route path="certificate">
             <Route index element={<CatalogPage category="certificate" />} />
-            <Route path={':productId'} element={<CertificateDetailsPage />} />
+            <Route path={':itemId'} element={<CertificateDetailsPage />} />
           </Route>
       
         <Route path="about-us" element={<AboutUsPage />} />

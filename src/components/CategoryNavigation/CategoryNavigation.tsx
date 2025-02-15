@@ -7,7 +7,7 @@ interface CategoryNavigationProps {
 }
 export const CategoryNavigation: React.FC<CategoryNavigationProps> = ({ classNameNav = ''}) => {
   return (
-    <nav className={`${styles.navigation} ${styles[classNameNav] || ''}`}>
+    <nav className={`${styles.navigation} ${classNameNav ? styles[classNameNav] : ''}`}>
       <ul className={styles.navigation__list}>
         <li className={styles.navigation__item}>
           <NavLink to="/">All</NavLink>

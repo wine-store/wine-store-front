@@ -1,3 +1,7 @@
+@use '../../styles//main.scss';
+@use "../../styles/mixin";
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,9 +18,15 @@
   flex: 1;
   max-width:1440px;
   width: 100%;
-  padding-inline: 24px;
-  padding-top: 144px;
+  padding-inline: 16px;
+  padding-top: 80px;
   margin: 0 auto;
+  overflow-x:hidden;
+
+  @include mixin.on-desktop {
+    padding-inline: 24px;
+    padding-top: 144px;
+  }
 }
 
 ::-webkit-scrollbar {

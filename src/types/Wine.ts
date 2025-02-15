@@ -1,15 +1,16 @@
 export interface Wine {
+  itemId: string;
   title: string;
-  price: string;
   description: string;
-  type: string;
+  price: number;
+  capacity: number;
   grape: string;
-  country: string;
-  region: string;
-  vintage: string;
-  capacity: string;
-  abv: string;
   closure: string;
-  characteristics: string;
+  country: string;
+  characteristics: string[];
+  type: string;
+  ABV: number;
+  region: string;
   style: string;
+  vintage: number;
 }

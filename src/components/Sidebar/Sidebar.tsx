@@ -1,15 +1,18 @@
-import { FilterForWine } from '../FilterForWine';
 import styles from './Sidebar.module.scss';
 import { CategoryNavigation } from '../CategoryNavigation';
 import { DropDown } from '../DropDown';
+import filter from '../../assets/icon/filter.svg';
 type Props = {
-  category: 'all' | 'wine' | 'object' | 'certificate';
+  toggleFilterVisibility: () => void;
 };
-export const Sidebar: React.FC<Props> = ({ category }) => {
+export const Sidebar: React.FC<Props> = ({ toggleFilterVisibility }) => {
   return (
     <div className={styles.sidebar}>
-      <FilterForWine category={category} />
+      <div className={styles.filterBtn__text}>Filter</div>
       <CategoryNavigation classNameNav="sidebarNavigation" />
+      <button className={styles.filterButton} onClick={toggleFilterVisibility}>
+        <img src={filter} alt="filter"></img>
+      </button>
       <DropDown />
     </div>
   );
