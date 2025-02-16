@@ -99,7 +99,7 @@ export const FilterForWine: React.FC<Props> = ({
       {!error && (
         <div className={styles.sidebar}>
           <div className={styles.filterForMob}>
-            <span className={styles.arrowDo} onClick={toggleFilterVisibility}></span>
+            <span className={styles.arrowDown} onClick={toggleFilterVisibility}></span>
             <span className={styles.filterForMobles__text}>Filter</span>
           </div>
           {activeFilters.length > 0 && (

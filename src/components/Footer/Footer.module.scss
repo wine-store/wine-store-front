@@ -1,35 +1,76 @@
+@use '../../styles/mixin.scss' as *;
+
 .footer {
-  height: 318px;
   background-color: #A9A9B1;
- 
   
   &__link {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 8px;
+    grid-template-areas: 
+    "col1 col3"
+    "col2 col4";
+    padding: 16px;
+    
+    @include on-tablet {
+      padding: 24px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   &__divider {
     display: block;
-    width: 100%;
+    width: calc(100% - 32px);
     height: 1px;
     background-color: #000;
+    margin: auto;
+
+    @include on-desktop {
+      width: 100%;
   }
+}
 
   &__copyright {
-    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px;
+    padding: 16px;
+    grid-template-areas: 
+      "text1 text2"
+      "text1 text3";
+
+  @include on-desktop {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 24px;
   }
+}
+
+&__text {
+  &:nth-child(1) { grid-area: text1; }
+  &:nth-child(2) { grid-area: text2; }
+  &:nth-child(3) { grid-area: text3; }
+}
 }
 
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 16px;
   cursor: pointer;
+
+  @include on-desktop {
+    gap: 40px;
+  }
+
+  &:nth-child(1) { grid-area: col1; }
+  &:nth-child(2) { grid-area: col2; }
+  &:nth-child(3) { grid-area: col3; }
+  &:nth-child(4) { grid-area: col4; }
 
   &__content {
     display: flex;

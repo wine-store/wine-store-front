@@ -1,11 +1,7 @@
 @use '../../styles/mixin.scss' as *;
 
 .wineCard{
-  min-width:343px;
   height: auto;
-  @include on-desktop {
-    min-width:330px;
-  }
 
   @include hover {
     transform: translateY(-2px);
